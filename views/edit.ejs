@@ -1,0 +1,18 @@
+<%- include("partials/header.ejs") -%>
+
+<h1>Edit</h1>
+
+	<form action="/editandpublish" method="post">
+		<div class="form-group">
+			<label for="">title</label>
+			<textarea name="editItemTitle" class="form-control" rows="1"><%= postHTML.title %></textarea>
+			<label for="">post</label>
+			<textarea name="editItemBody" class="form-control" rows="10"><%= postHTML.body %></textarea>
+		</div>
+		
+		<button type="submit" class="btn btn-primary" name="submitButton" value="<%=postHTML._id%>">Publish</button>
+	</form>
+
+
+
+<%- include("partials/footer.ejs") -%>

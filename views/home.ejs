@@ -1,0 +1,16 @@
+<%- include("partials/header.ejs") -%>
+
+<h1>Home</h1>
+<p><%= startingContentHTML %></p>
+<% postsHTML.forEach(function(post) { %>
+
+	<h1><%= post.title  %></h1>
+
+	<p><%= post.body.substring(0, 100) + "..." %> <a href="/posts/<%=post._id%>">Read more</a> </p>
+    <% }); %>
+
+	<form action="/compose" method="get">
+		<button class="btn btn-primary">Create New Post</button>
+	</form>
+
+<%- include("partials/footer.ejs") -%>

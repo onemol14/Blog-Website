@@ -1,0 +1,14 @@
+<%- include("partials/header.ejs") -%>
+<h1><%= titleHTML %></h1>
+<p><%= bodyHTML %></p>
+
+<div>
+	<form action="/edit" method="post" class="editanddelete">
+		<button name="editButton" class="btn btn-warning" value="<%=postID%>" onclick="this.form.submit()">Edit</button>
+	</form>
+
+	<form action="/delete" method="post" class="editanddelete">
+		<button name="deleteButton" class="btn btn-danger" value="<%=postID%>" onclick="this.form.submit()">Delete</button>
+	</form>
+</div>
+<%- include("partials/footer.ejs") -%>
