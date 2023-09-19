@@ -3,12 +3,12 @@
 <p><%= bodyHTML %></p>
 
 <div>
-	<form action="/edit" method="post" class="editanddelete">
-		<button name="editButton" class="btn btn-warning" value="<%=postID%>" onclick="this.form.submit()">Edit</button>
+	<form action="/edit/<%=postId%>" method="get" class="editanddelete">
+		<button class="btn btn-warning"  type="submit">Edit</button>
 	</form>
 
-	<form action="/delete" method="post" class="editanddelete">
-		<button name="deleteButton" class="btn btn-danger" value="<%=postID%>" onclick="this.form.submit()">Delete</button>
+	<form action="/posts/<%=postId%>" method="delete" class="editanddelete">
+		<button class="btn btn-danger" type="submit">Delete</button>
 	</form>
 </div>
 <%- include("partials/footer.ejs") -%>

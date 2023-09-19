@@ -11,7 +11,7 @@ const aboutContent = "This web application was made using node.js and mongodb.";
 const contactContent = "You can contact me at anmol.swarnkar@gmail.com :).";
 const app = express();
 
-mongoose.connect("mongodb+srv://anmol:114131512@cluster0.ixxmu.mongodb.net/blogDB?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://onemol:_aA114131512@cluster0.8i1yk.mongodb.net/?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true});
 // let posts = [];
 
 const postSchema = {
@@ -26,13 +26,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 app.get("/", function(req, res) {
-
     Post.find({}, function(err, foundPosts) {
         if(!err) {
           res.render("home", {
             startingContentHTML: homeStartingContent,
             postsHTML: foundPosts
           });
+        } else {
+          res.send(err);
         }
     });
 });
@@ -41,8 +42,6 @@ app.get("/contact", function(req,res) {
     res.render("contact", {
       contactHTML: contactContent
     });
-  
-
 });
 
 app.get("/about", function(req,res) {
@@ -64,9 +63,9 @@ app.post("/compose", function(req, res) {
     if(post.title.length != 0 || post.body.length != 0) {
       post.save(function(err) {
         if(!err) {
-
           res.redirect("/");
-
+        } else {
+          res.send(err);
         }
       });
     } else {
@@ -75,49 +74,60 @@ app.post("/compose", function(req, res) {
 
 });
 
-app.post("/delete", function(req, res) {
-  let postItemID = req.body.deleteButton;
-
-  Post.findByIdAndRemove(postItemID, function(err) {
-    if(!err) {
-      res.redirect("/");
-    }
-  });
-
-});
-
-app.post("/edit", function(req, res){
-
-  let postItemID = req.body.editButton;
-
-  Post.findById(postItemID, function(err, foundPost){
-    res.render("edit", {
-      postHTML: foundPost
-    })
-  });
-});
 
 app.get("/posts/:postId", function(req,res) {
+  console.log("get request triggered");
   Post.findOne({_id: req.params.postId}, function(err, post) {
-    res.render("post", {
-      titleHTML: post.title,
-      bodyHTML: post.body, 
-      postID: post._id
-    });
-  });
-});
-mongoose.set('useFindAndModify', false);
-app.post("/editandpublish", function(req, res) {
-  let postItemID = req.body.submitButton;
-  let postItemTitle = req.body.editItemTitle;
-  let postItemBody = req.body.editItemBody;
-
-  Post.findByIdAndUpdate(postItemID, {title: postItemTitle, body: postItemBody}, function(err) {
     if(!err) {
-      res.redirect("/");
+      res.render("post", {
+        titleHTML: post.title,
+        bodyHTML: post.body, 
+        postId: req.params.postId
+      });
+    } else {
+      res.send(err);
     }
   });
+});
 
+app.delete("/posts/:postId", function(req, res) {
+  console.log("delete request made.");
+  Post.deleteOne({_id: req.params.postId}, function(err) {
+    if(!err) {
+      res.redirect("/");
+    } else {
+      res.send(err);
+    }
+  });
+});
+
+app.get("/edit/:postId", function(req, res){
+  Post.findById(req.params.postId, function(err, foundPost){
+    if(!err) {
+      res.render("edit", {
+        postHTML: foundPost, 
+        postId: req.params.postId
+      });
+    } else {
+      res.send(err);
+    }
+  });
+});
+
+mongoose.set('useFindAndModify', false);
+
+app.patch("/posts/:postId", function(req, res) {
+  console.log(req.body);
+  Post.updateOne(
+    {_id: req.params.postId}, 
+    {$set: req.body},
+    (err) => {
+      if(!err) {
+        res.redirect("/");
+      } else {
+        res.send(err);
+      }
+    });
 });
 
 let port = process.env.PORT;

@@ -2,7 +2,7 @@
 
 <h1>Edit</h1>
 
-	<form action="/editandpublish" method="post">
+	<form action="/posts/<%=postHTML._id%>" method="PATCH">
 		<div class="form-group">
 			<label for="">title</label>
 			<textarea name="editItemTitle" class="form-control" rows="1"><%= postHTML.title %></textarea>
